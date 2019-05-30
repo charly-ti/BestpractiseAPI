@@ -2,20 +2,20 @@ package com.rcggs.sample.dto;
 
 public class ErrorDetails {
 	
-	private String code;
+	private int code;
 	
 	private String message;
 
-	public ErrorDetails(String code, String message) {
+	public ErrorDetails(int code, String message) {
 		this.code = code;
 		this.message = message;
 		
 	}
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 

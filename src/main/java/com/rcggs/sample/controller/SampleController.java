@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,10 +56,6 @@ public class SampleController {
 	 * @throws UserNotFoundException
 	 */
 	@ApiOperation(value = "Add a user")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully added User"),
-			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
 	@PostMapping(value = "/users")
 	public ResponseEntity<?> addUsers(
 			@ApiParam(value = "User object store in database table", required = true) @RequestBody User user)
@@ -86,10 +83,10 @@ public class SampleController {
 	 * @throws UserNotFoundException
 	 */
 	@ApiOperation(value = "Update the user")
-	@PutMapping(value = "/users")
+	@PostMapping(value = "/users/{userID}")
 	public ResponseEntity<StatusResponse<User>> updateUser(
 			@ApiParam(value = "Update user object", required = true) @RequestBody Userdto user,
-			@ApiParam(value = "user ID to update user object", required = true) @RequestParam("userID") Long userID)
+			@ApiParam(value = "user ID to update user object", required = true) @PathVariable("userID") Long userID)
 			throws UserNotFoundException {
 		AuditLog auditLogBefore = new AuditLog("Update user", "buisinessTxnNumber", 15,
 				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "INFO", "Started Updating User",

@@ -19,7 +19,7 @@ public class Swagger2Config {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
             .apis(RequestHandlerSelectors
-                .basePackage("com.example.camel.controller"))
+                .basePackage("com.rcggs.sample.controller"))
             .paths(PathSelectors.regex("/sample.*"))
             .build().apiInfo(apiEndPointsInfo());
     }
