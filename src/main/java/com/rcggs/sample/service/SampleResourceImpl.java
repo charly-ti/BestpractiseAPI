@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.rcggs.sample.dto.AuditLog;
 import com.rcggs.sample.dto.Userdto;
+import com.rcggs.sample.exception.ConstraintsException;
 import com.rcggs.sample.exception.UserNotFoundException;
 import com.rcggs.sample.model.User;
 import com.rcggs.sample.repository.UserRepository;
+
+import antlr.StringUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -62,18 +65,12 @@ class SampleResourceImpl implements SampleResource {
 	 * @throws UserNotFoundException
 	 */
 	@Override
-	public String createUser(User user) throws UserNotFoundException {
-		Optional<User> oldUser = userRepository.findUserById(user.getId());
-		if (oldUser.isPresent()) {
-			AuditLog auditLog = new AuditLog("Add new user", "buisinessTxnNumber", 15,
-					new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "ERROR", "Requested user already exist for the given ID",
-					"REST API");
-			loggerService.sendToLog(auditLog);
-			throw new UserNotFoundException(HttpStatus.NOT_FOUND.value(), "Requested user already exist for the given ID");
-		} else {
-			userRepository.save(user);
-			return String.valueOf(user.getId());
-		}
+	public String createUser(Userdto user) throws UserNotFoundException {
+
+			User mappedUser = new User();
+			mappedUser = setUserDetails(mappedUser, user);
+			userRepository.save(mappedUser);
+			return String.valueOf(mappedUser.getId());
 
 	}
 
@@ -86,7 +83,7 @@ class SampleResourceImpl implements SampleResource {
 	 * @throws UserNotFoundException 
 	 */
 	@Override
-	public User updateUser(Userdto newUser, Long userID) throws UserNotFoundException {
+	public User updateUser(Userdto newUser, Long userID) throws UserNotFoundException, ConstraintsException {
 		Long ID = userID.longValue();
 		Optional<User> user = userRepository.findUserById(ID);
 		if(!user.isPresent()) {
@@ -129,5 +126,7 @@ class SampleResourceImpl implements SampleResource {
 		User userMapped = modelMapper.map(newUser, User.class);
 		return userMapped;
 	}
+
+	
 
 }

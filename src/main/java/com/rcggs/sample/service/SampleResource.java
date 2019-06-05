@@ -1,6 +1,7 @@
 package com.rcggs.sample.service;
 
 import com.rcggs.sample.dto.Userdto;
+import com.rcggs.sample.exception.ConstraintsException;
 import com.rcggs.sample.exception.UserNotFoundException;
 import com.rcggs.sample.model.User;
 
@@ -26,7 +27,7 @@ public interface SampleResource {
 	 * @return the string
 	 * @throws UserNotFoundException 
 	 */
-	public String createUser(User user) throws UserNotFoundException;
+	public String createUser(Userdto user) throws UserNotFoundException;
 
 	/**
 	 * Update user.
@@ -36,7 +37,7 @@ public interface SampleResource {
 	 * @return the string
 	 * @throws UserNotFoundException 
 	 */
-	public User updateUser(Userdto user,Long userID) throws UserNotFoundException;
+	public User updateUser(Userdto user,Long userID) throws UserNotFoundException,ConstraintsException;
 
 
 }

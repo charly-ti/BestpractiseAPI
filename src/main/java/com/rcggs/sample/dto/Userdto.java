@@ -1,23 +1,41 @@
 package com.rcggs.sample.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 
 public class Userdto {
 	
-private long id;
+//private long id;
 	
-   
+
+	@NotNull
+	@NotBlank(message = "Name can not be null")
+	@Pattern(regexp="^[a-zA-Z~]*$", message = "Invalid Name")
+	@Size(max=60)
 	private String name;
 	private String organization;
+	@NotNull
+	@NotBlank(message = "Mail Address can not be null")
+	@Email
+	@Pattern(regexp=".+@.+\\..+", message="Email must be a well-formed email address")
+	@Size(max=60)
 	private String email;
 	private Double salary;
+	@NotNull
+	@NotBlank
+	@Size(min=1,max=30,message = "size exceeds") 
+	@Pattern(regexp="^\\\\?[0-9]{1,30}$", message = "Invalid Phone number")
 	private String phoneNo;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+//	public long getId() {
+//		return id;
+//	}
+//	public void setId(long id) {
+//		this.id = id;
+//	}
 	public String getName() {
 		return name;
 	}

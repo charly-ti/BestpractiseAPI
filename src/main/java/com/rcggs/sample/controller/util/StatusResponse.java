@@ -8,14 +8,12 @@ import com.rcggs.sample.model.User;
 public class StatusResponse<T> {
     
 	private int code;
-    
-//    private int internalCode;
-    
-    private HttpStatus status;
-    
+      
     private String message;
     
     private T data;
+    
+    private String status;
 
 	public int getCode() {
 		return code;
@@ -25,26 +23,8 @@ public class StatusResponse<T> {
 		this.code = code;
 	}
 
-//	public int getInternalCode() {
-//		return internalCode;
-//	}
-//
-//	public void setInternalCode(int internalCode) {
-//		this.internalCode = internalCode;
-//	}
-
-	
-
 	public String getMessage() {
 		return message;
-	}
-
-	public HttpStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(HttpStatus status) {
-		this.status = status;
 	}
 
 	public void setMessage(String message) {
@@ -59,19 +39,26 @@ public class StatusResponse<T> {
 		this.data = data;
 	}
 
-
-	public StatusResponse(int hashCode, HttpStatus ok, String success) {
+	public StatusResponse(int hashCode, String status, String success, T data) {
 		this.code = hashCode;
-		this.status = ok;
-		this.message = success;
-	}
-
-	public StatusResponse(int value, HttpStatus ok, String success, T data) {
-		this.code = value;
-		this.status = ok;
+		this.status = status;
 		this.message = success;
 		this.data = data;
 		}
+
+	public StatusResponse(int hashCode, String status, String errorMessage) {
+		this.code = hashCode;
+		this.status = status;
+		this.message = errorMessage;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatusString(String status) {
+		this.status = status;
+	}
 
 	
     

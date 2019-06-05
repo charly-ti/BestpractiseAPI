@@ -1,12 +1,20 @@
+/*
+ * 
+ */
 package com.rcggs.sample.controller;
 
 //import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rcggs.sample.controller.util.StatusResponse;
 import com.rcggs.sample.dto.AuditLog;
 import com.rcggs.sample.dto.Userdto;
+import com.rcggs.sample.exception.ConstraintsException;
 import com.rcggs.sample.exception.UserNotFoundException;
 import com.rcggs.sample.model.User;
 import com.rcggs.sample.service.Loggerservice;
@@ -58,8 +67,8 @@ public class SampleController {
 	@ApiOperation(value = "Add a user")
 	@PostMapping(value = "/users")
 	public ResponseEntity<?> addUsers(
-			@ApiParam(value = "User object store in database table", required = true) @RequestBody User user)
-			throws UserNotFoundException {
+			@ApiParam(value = "User object store in database table", required = true) @RequestBody @Valid Userdto user)
+			throws ConstraintsException, UserNotFoundException {
 		AuditLog auditLogBefore = new AuditLog("Add new user", "buisinessTxnNumber", 15,
 				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "INFO", "Started Adding User",
 				"REST API");
@@ -69,8 +78,7 @@ public class SampleController {
 				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "INFO", "Completed Adding User",
 				"REST API");
 		loggerService.sendToLog(auditLogAfter);
-		return ResponseEntity.ok(new StatusResponse<User>(HttpStatus.OK.value(), HttpStatus.OK, Constants.SUCCESS));
-
+		return ResponseEntity.ok(new StatusResponse<User>(Constants.SUCCESS_CODE, Constants.OK, Constants.SUCCESS));
 	}
 //	Point 10:A well-developed JavaDoc must be kept.
 
@@ -85,9 +93,9 @@ public class SampleController {
 	@ApiOperation(value = "Update the user")
 	@PostMapping(value = "/users/{userID}")
 	public ResponseEntity<StatusResponse<User>> updateUser(
-			@ApiParam(value = "Update user object", required = true) @RequestBody Userdto user,
+			@ApiParam(value = "Update user object", required = true) @RequestBody @Valid Userdto user,
 			@ApiParam(value = "user ID to update user object", required = true) @PathVariable("userID") Long userID)
-			throws UserNotFoundException {
+			throws UserNotFoundException, ConstraintsException {
 		AuditLog auditLogBefore = new AuditLog("Update user", "buisinessTxnNumber", 15,
 				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "INFO", "Started Updating User",
 				"REST API");
@@ -97,7 +105,7 @@ public class SampleController {
 				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()), "INFO", "Completed Updating User",
 				"REST API");
 		loggerService.sendToLog(auditLogAfter);
-		return ResponseEntity.ok(new StatusResponse<User>(HttpStatus.OK.value(), HttpStatus.OK, Constants.SUCCESS));
+		return ResponseEntity.ok(new StatusResponse<User>(Constants.SUCCESS_CODE, Constants.OK, Constants.SUCCESS));
 	}
 
 	/**
@@ -123,9 +131,9 @@ public class SampleController {
 				"Completed Fetching User details", "REST API");
 		loggerService.sendToLog(auditLogAfter);
 //		return new ResponseEntity<User>(user, HttpStatus.OK);
-		return ResponseEntity
-				.ok(new StatusResponse<User>(HttpStatus.OK.value(), HttpStatus.OK, Constants.SUCCESS, user));
-
+		return ResponseEntity.ok(new StatusResponse<User>(Constants.SUCCESS_CODE, Constants.OK, Constants.SUCCESS,user));
 	}
+
+	
 
 }
